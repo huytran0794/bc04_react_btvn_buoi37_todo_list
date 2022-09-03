@@ -9,6 +9,7 @@ import {
 } from "../../constant/action.const";
 const initialState = {
   todoList: [],
+  searchTerm: "",
 };
 
 export let todoListReducer = (state = initialState, { type, payload }) => {
@@ -52,6 +53,8 @@ export let todoListReducer = (state = initialState, { type, payload }) => {
         ...state,
         todoList: [...state.todoList],
       };
+    case SEARCH_TO_DO_BY_NAME:
+      return { ...state, searchTerm: payload };
     default:
       return state;
   }

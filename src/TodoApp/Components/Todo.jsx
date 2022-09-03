@@ -25,11 +25,7 @@ class Todo extends Component {
               id={`status-input-${id}`}
               checked={completed}
               onChange={() => {
-                this.props.handleQuickUpdateStatus({
-                  id,
-                  title,
-                  completed: !completed,
-                });
+                this.props.handleQuickUpdateStatus({...this.props.td, completed: !completed,});
               }}
             ></input>
             <span className="icon-check fa-solid fa-check"></span>

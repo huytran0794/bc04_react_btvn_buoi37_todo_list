@@ -54,7 +54,6 @@ class Form extends Component {
   }
 
   render() {
-    console.log("Render form");
     return (
       <StyledForm className="todo-form">
         <StyledFormGroup>
@@ -85,6 +84,22 @@ class Form extends Component {
             <option value="2">Completed</option>
           </StyledSelect>
         </StyledFormGroup>
+        {/* <StyledFormGroup>
+          <label htmlFor="td-status-select" className="group-title">
+            Choose task priority
+          </label>
+          <StyledSelect
+            className="priority-select"
+            id="td-priority-select"
+            name="priority"
+            onChange={this.handleOnChange}
+            value={this.state.todo.priority}
+          >
+            <option value="1">Priority 1</option>
+            <option value="2">Priority 2</option>
+            <option value="3">Priority 3</option>
+          </StyledSelect>
+        </StyledFormGroup> */}
       </StyledForm>
     );
   }

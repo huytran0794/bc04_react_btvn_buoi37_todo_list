@@ -6,6 +6,7 @@ import Todo from "./Todo";
 class TodoList extends Component {
   state = {
     currentTabIdx: 0,
+    tdList: [],
     inCompleteArr: [],
     completeArr: [],
   };
@@ -19,9 +20,10 @@ class TodoList extends Component {
         list = this.state.inCompleteArr;
         break;
       default:
-        list = this.props.todoList;
+        list = this.state.tdList;
         break;
     }
+
     return list.map((td, idx) => {
       return <Todo key={td.id.toString() + idx} td={td} />;
     });
@@ -35,7 +37,7 @@ class TodoList extends Component {
             <span className="number nb-complete">
               {this.state.completeArr.length}
             </span>
-            /<span className="title">completed task</span>
+            <span className="title">completed task</span>
           </p>
         );
       case 2:
@@ -44,13 +46,15 @@ class TodoList extends Component {
             <span className="number nb-incomplete">
               {this.state.inCompleteArr.length}
             </span>
-            /<span className="title">task left</span>
+            <span className="title">task left</span>
           </p>
         );
       default:
         return (
           <p className="text text-all">
-            <span className="number nb-complete">0</span>
+            <span className="number nb-complete">
+              {this.state.completeArr.length}
+            </span>
             <span className="char">/</span>
             <span className="number nb-all">{this.props.todoList.length}</span>
             <span className="title">completed task</span>
@@ -63,12 +67,22 @@ class TodoList extends Component {
   };
   static getDerivedStateFromProps(nextProps, state) {
     if (nextProps.todoList.length) {
-      state.completeArr = _.filter(nextProps.todoList, (td) => td.completed);
-      state.inCompleteArr = _.filter(nextProps.todoList, (td) => !td.completed);
-      return state;
+      state.tdList = [...nextProps.todoList];
     }
 
-    return true;
+    if (nextProps.searchTerm.length) {
+      state.tdList = _.filter(nextProps.todoList, (td) => {
+        let idx = td.title
+          .toLowerCase()
+          .indexOf(nextProps.searchTerm.toLowerCase());
+        return idx > -1;
+      });
+    }
+
+    state.completeArr = _.filter(state.tdList, (td) => td.completed);
+    state.inCompleteArr = _.filter(state.tdList, (td) => !td.completed);
+
+    return state;
   }
   render() {
     console.log("current tab:", this.state.currentTab);
@@ -77,9 +91,10 @@ class TodoList extends Component {
         <h5
           style={{
             color: "#fff",
-            fontSize: "25px",
+            fontSize: "35px",
             fontWeight: "500",
             textAlign: "center",
+            marginTop: "3rem",
           }}
         >
           There is no task to show
@@ -134,6 +149,7 @@ class TodoList extends Component {
 
 let mapStateToProps = (state) => ({
   todoList: state.todoListReducer.todoList,
+  searchTerm: state.todoListReducer.searchTerm,
 });
 
 export default connect(mapStateToProps)(TodoList);
